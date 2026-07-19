@@ -1,0 +1,51 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field, delete_button %}
+{% block title %}Contact{% endblock %}
+{% block heading %}Contact Management{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    <h2>Contact Details</h2>
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ field(form.address) }}
+        {{ field(form.phone1) }}
+        {{ field(form.phone2) }}
+        {{ field(form.email) }}
+        {{ field(form.maps_link, hint="Full Google Maps share link, e.g. https://maps.google.com/...") }}
+        <button type="submit" class="btn btn-save">Save Changes</button>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Social Media Links</h2>
+    <form method="POST" action="{{ url_for('admin.add_social_link') }}">
+        {{ social_form.csrf_token }}
+        {{ field(social_form.platform) }}
+        {{ field(social_form.url) }}
+        {{ field(social_form.icon, hint="Font Awesome class, e.g. fa-brands fa-instagram") }}
+        {{ field(social_form.display_order) }}
+        <button type="submit" class="btn btn-save">Add Link</button>
+    </form>
+
+    <div class="admin-table-wrap" style="margin-top:20px;">
+        <table>
+            <thead><tr><th>Platform</th><th>URL</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for link in social_links %}
+                <tr>
+                    <td><i class="{{ link.icon }}"></i> {{ link.platform }}</td>
+                    <td>{{ link.url }}</td>
+                    <td class="action-links">
+                        {{ delete_button(url_for('admin.delete_social_link', link_id=link.id), delete_form, confirm_msg="Delete this social link?") }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" style="text-align:center;">No social links yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

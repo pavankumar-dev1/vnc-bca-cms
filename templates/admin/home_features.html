@@ -1,0 +1,43 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field, delete_button %}
+{% block title %}Featured Sections{% endblock %}
+{% block heading %}Featured Sections{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    <h2>Add Featured Section</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ field(form.title) }}
+        {{ field(form.description) }}
+        {{ field(form.image) }}
+        {{ field(form.display_order) }}
+        <button type="submit" class="btn btn-save">Add</button>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Existing Featured Sections</h2>
+    <div class="admin-table-wrap">
+        <table>
+            <thead><tr><th>Image</th><th>Title</th><th>Order</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for feature in features %}
+                <tr>
+                    <td>{% if feature.image %}<img src="{{ url_for('static', filename=feature.image) }}" class="thumb">{% endif %}</td>
+                    <td>{{ feature.title }}</td>
+                    <td>{{ feature.display_order }}</td>
+                    <td class="action-links">
+                        <a href="{{ url_for('admin.edit_home_feature', feature_id=feature.id) }}"><i class="fas fa-edit"></i> Edit</a>
+                        {{ delete_button(url_for('admin.delete_home_feature', feature_id=feature.id), delete_form, confirm_msg="Delete this featured section?") }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" style="text-align:center;">No featured sections yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

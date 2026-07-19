@@ -1,0 +1,15 @@
+{% macro field(f, hint=None) %}
+<div class="form-group">
+    {{ f.label(class="form-label") }}
+    {{ f(class="form-control") }}
+    {% if hint %}<div class="form-hint">{{ hint }}</div>{% endif %}
+    {% for error in f.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+</div>
+{% endmacro %}
+
+{% macro delete_button(action, delete_form, label="Delete", confirm_msg="Delete this item? This cannot be undone.") %}
+<form action="{{ action }}" method="POST" style="display:inline;" onsubmit="return confirm('{{ confirm_msg }}')">
+    {{ delete_form.csrf_token }}
+    <button type="submit" class="danger"><i class="fas fa-trash"></i> {{ label }}</button>
+</form>
+{% endmacro %}

@@ -1,0 +1,23 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field %}
+{% block title %}About College{% endblock %}
+{% block heading %}About College{% endblock %}
+{% block content %}
+<div class="admin-card">
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ field(form.vision) }}
+        {{ field(form.mission) }}
+        {{ field(form.principal_name) }}
+        {{ field(form.principal_message) }}
+        {% if about.principal_photo %}<img src="{{ url_for('static', filename=about.principal_photo) }}" class="thumb" style="width:100px;height:100px;border-radius:50%;">{% endif %}
+        {{ field(form.principal_photo, hint="Leave blank to keep the current photo.") }}
+        {{ field(form.about_text) }}
+        {% if about.image1 %}<img src="{{ url_for('static', filename=about.image1) }}" class="thumb" style="width:120px;height:80px;">{% endif %}
+        {{ field(form.image1, hint="Leave blank to keep the current image.") }}
+        {% if about.image2 %}<img src="{{ url_for('static', filename=about.image2) }}" class="thumb" style="width:120px;height:80px;">{% endif %}
+        {{ field(form.image2, hint="Leave blank to keep the current image.") }}
+        <button type="submit" class="btn btn-save">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

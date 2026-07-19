@@ -1,0 +1,30 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field %}
+{% block title %}Website Settings{% endblock %}
+{% block heading %}Website Settings{% endblock %}
+{% block content %}
+<div class="admin-card">
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ field(form.college_name) }}
+        {% if settings.logo %}<img src="{{ url_for('static', filename=settings.logo) }}" class="thumb">{% endif %}
+        {{ field(form.logo, hint="Shown in the navigation bar instead of the text name, if uploaded.") }}
+        {% if settings.favicon %}<img src="{{ url_for('static', filename=settings.favicon) }}" class="thumb">{% endif %}
+        {{ field(form.favicon) }}
+        {{ field(form.footer_text) }}
+        {{ field(form.copyright_text) }}
+        {{ field(form.developer_name, hint="Shown on the developer credit button.") }}
+        {{ field(form.developer_url, hint="Your personal site/portfolio link. Leave blank to link to the built-in developer profile page instead.") }}
+        {{ field(form.meta_description, hint="Shown in Google search results, ~150-160 characters.") }}
+        {{ field(form.meta_keywords) }}
+        {% if settings.og_image %}<img src="{{ url_for('static', filename=settings.og_image) }}" class="thumb">{% endif %}
+        {{ field(form.og_image, hint="Image shown when the site is shared on social media/WhatsApp.") }}
+        <button type="submit" class="btn btn-save">Save Changes</button>
+    </form>
+</div>
+{% if session.get('role') != 'developer' %}
+<div class="admin-card">
+    <p class="form-hint">Whether the developer credit button appears on the site at all is controlled exclusively by the developer account, not from here.</p>
+</div>
+{% endif %}
+{% endblock %}

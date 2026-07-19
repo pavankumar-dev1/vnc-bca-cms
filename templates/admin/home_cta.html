@@ -1,0 +1,41 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field, delete_button %}
+{% block title %}CTA Buttons{% endblock %}
+{% block heading %}Call-to-Action Buttons{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    <h2>Add CTA Button</h2>
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ field(form.text) }}
+        {{ field(form.link, hint="A URL, or an in-page anchor like #contact") }}
+        {{ field(form.display_order) }}
+        <button type="submit" class="btn btn-save">Add</button>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Existing Buttons</h2>
+    <div class="admin-table-wrap">
+        <table>
+            <thead><tr><th>Order</th><th>Text</th><th>Link</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for button in buttons %}
+                <tr>
+                    <td>{{ button.display_order }}</td>
+                    <td>{{ button.text }}</td>
+                    <td>{{ button.link }}</td>
+                    <td class="action-links">
+                        {{ delete_button(url_for('admin.delete_home_cta', button_id=button.id), delete_form, confirm_msg="Delete this button?") }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" style="text-align:center;">No CTA buttons yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

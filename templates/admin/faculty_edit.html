@@ -1,0 +1,23 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field %}
+{% block title %}Edit Faculty{% endblock %}
+{% block heading %}Edit Faculty Member{% endblock %}
+{% block content %}
+<div class="admin-card">
+    {% if member.photo %}<img src="{{ url_for('static', filename=member.photo) }}" class="thumb" style="width:100px;height:100px;border-radius:50%;margin-bottom:15px;">{% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ field(form.name) }}
+        {{ field(form.department) }}
+        {{ field(form.designation) }}
+        {{ field(form.qualification) }}
+        {{ field(form.email) }}
+        {{ field(form.phone) }}
+        {{ field(form.photo, hint="Leave blank to keep the current photo.") }}
+        {{ field(form.display_order) }}
+        <div class="form-group">{{ form.is_leadership() }} {{ form.is_leadership.label }}</div>
+        <button type="submit" class="btn btn-save">Save</button>
+        <a href="{{ url_for('admin.admin_faculty') }}" class="btn btn-cancel">Cancel</a>
+    </form>
+</div>
+{% endblock %}

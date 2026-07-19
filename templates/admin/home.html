@@ -1,0 +1,32 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field %}
+{% block title %}Home Page{% endblock %}
+{% block heading %}Home Page Management{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    <h2>Hero &amp; Welcome Section</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ field(form.hero_title) }}
+        {{ field(form.hero_subtitle) }}
+        {{ field(form.hero_cta_text) }}
+        {{ field(form.hero_cta_link) }}
+        {{ field(form.banner_image, hint="Optional. Shown behind the hero title if uploaded.") }}
+        {% if home.banner_image %}<img src="{{ url_for('static', filename=home.banner_image) }}" class="thumb" style="width:120px;height:70px;"><br><br>{% endif %}
+        {{ field(form.welcome_title) }}
+        {{ field(form.welcome_message) }}
+        <button type="submit" class="btn btn-save">Save Changes</button>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Related Sections</h2>
+    <div class="module-grid">
+        <a class="module-card" href="{{ url_for('admin.admin_home_stats') }}"><i class="fas fa-chart-simple"></i> Statistics / Counters</a>
+        <a class="module-card" href="{{ url_for('admin.admin_home_features') }}"><i class="fas fa-star"></i> Featured Sections</a>
+        <a class="module-card" href="{{ url_for('admin.admin_home_cta') }}"><i class="fas fa-hand-pointer"></i> CTA Buttons</a>
+    </div>
+</div>
+
+{% endblock %}

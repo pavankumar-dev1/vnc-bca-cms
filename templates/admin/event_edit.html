@@ -1,0 +1,44 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field, delete_button %}
+{% block title %}Edit Event{% endblock %}
+{% block heading %}Edit Event{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    {% if event.cover_image %}<img src="{{ url_for('static', filename=event.cover_image) }}" class="thumb" style="width:140px;height:90px;margin-bottom:15px;">{% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ field(form.title) }}
+        {{ field(form.description) }}
+        {{ field(form.event_date) }}
+        {{ field(form.venue) }}
+        {{ field(form.cover_image, hint="Leave blank to keep the current cover image.") }}
+        {{ field(form.status) }}
+        <button type="submit" class="btn btn-save">Save</button>
+        <a href="{{ url_for('admin.admin_events') }}" class="btn btn-cancel">Back to Events</a>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Gallery Images for this Event</h2>
+    <form method="POST" action="{{ url_for('admin.add_event_image', event_id=event.id) }}" enctype="multipart/form-data">
+        {{ image_form.csrf_token }}
+        {{ field(image_form.image) }}
+        {{ field(image_form.caption) }}
+        <button type="submit" class="btn btn-save">Add Image</button>
+    </form>
+
+    <div class="module-grid" style="margin-top:20px;">
+        {% for image in event.images %}
+        <div class="admin-card" style="padding:15px;">
+            <img src="{{ url_for('static', filename=image.image) }}" style="width:100%; border-radius:8px; margin-bottom:10px;">
+            <p>{{ image.caption }}</p>
+            {{ delete_button(url_for('admin.delete_event_image', image_id=image.id), delete_form, confirm_msg="Delete this image?") }}
+        </div>
+        {% else %}
+        <p>No gallery images added yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

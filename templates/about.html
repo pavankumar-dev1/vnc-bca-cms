@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | {{ site_settings.college_name if site_settings else "VNC BCA" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        .about-imgs { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin: 30px 0; }
+        .about-imgs img { width: 340px; height: 220px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft); }
+        .principal-photo { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 5px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.15); float: left; margin-right: 30px; }
+        @media (max-width: 600px) { .principal-photo { float: none; display:block; margin: 0 auto 20px; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">{{ site_settings.college_name if site_settings else "VNC BCA" }}</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/staff">Faculty</a></li>
+            <li><a href="/notices">Notices</a></li>
+        </ul>
+    </nav>
+
+    <div class="container section">
+        <h2 class="section-title" data-aos="fade-up">About the College</h2>
+
+        {% if about.about_text %}<p style="max-width:900px; margin:0 auto 30px; color:var(--text-muted); text-align:center;">{{ about.about_text }}</p>{% endif %}
+
+        {% if about.image1 or about.image2 %}
+        <div class="about-imgs" data-aos="fade-up">
+            {% if about.image1 %}<img src="{{ url_for('static', filename=about.image1) }}">{% endif %}
+            {% if about.image2 %}<img src="{{ url_for('static', filename=about.image2) }}">{% endif %}
+        </div>
+        {% endif %}
+
+        <div class="grid-3" style="margin-top:40px;">
+            {% if about.vision %}
+            <div class="card" data-aos="fade-right">
+                <h3>Vision</h3>
+                <p>{{ about.vision }}</p>
+            </div>
+            {% endif %}
+            {% if about.mission %}
+            <div class="card" data-aos="fade-left">
+                <h3>Mission</h3>
+                <p>{{ about.mission }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if about.principal_message %}
+        <div class="card" style="margin-top:40px; text-align:left; overflow:hidden;" data-aos="fade-up">
+            {% if about.principal_photo %}<img src="{{ url_for('static', filename=about.principal_photo) }}" class="principal-photo">{% endif %}
+            <h3>Principal's Message{% if about.principal_name %} &mdash; {{ about.principal_name }}{% endif %}</h3>
+            <p>{{ about.principal_message }}</p>
+        </div>
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="/" class="btn-primary" style="display:inline-block;">Back Home</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>{{ site_settings.copyright_text if site_settings and site_settings.copyright_text else "&copy; 2026 Vijayanagara College." }}</p>
+        {% if site_settings and site_settings.show_developer_button and site_settings.developer_name %}
+        <p style="font-size:0.8rem; margin-top:8px; color:#999;">
+            <a href="{{ site_settings.developer_url if site_settings.developer_url else url_for('public.developer') }}"
+               {% if site_settings.developer_url %}target="_blank" rel="noopener"{% endif %}>Developed by {{ site_settings.developer_name }}</a>
+        </p>
+        {% endif %}
+        <a href="{{ url_for('admin.login') }}" style="display:inline-block; width:10px; height:10px; margin-top:10px; opacity:0.12; text-decoration:none;">&middot;</a>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field %}
+{% block title %}Developer Tools{% endblock %}
+{% block heading %}Developer Tools{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    <h2>Developer Credit Button</h2>
+    <p class="form-hint" style="margin-bottom:15px;">
+        This is the only account that can hide the developer credit button
+        from the public site. Regular admin accounts can edit the developer
+        name/link in Website Settings, but only your account can remove the
+        button entirely.
+    </p>
+    <form method="POST">
+        {{ form.csrf_token }}
+        <div class="form-group">{{ form.show_developer_button() }} {{ form.show_developer_button.label }}</div>
+        <button type="submit" class="btn btn-save">Save</button>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Current Credit Settings</h2>
+    <p><strong>Name:</strong> {{ settings.developer_name or "(not set)" }}</p>
+    <p><strong>Link:</strong> {{ settings.developer_url or "(falls back to /developer profile page)" }}</p>
+    <p><a href="{{ url_for('admin.admin_settings') }}">Edit name/link in Website Settings &rarr;</a></p>
+</div>
+
+{% endblock %}

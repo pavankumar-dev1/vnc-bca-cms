@@ -1,0 +1,32 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import delete_button %}
+{% block title %}Messages{% endblock %}
+{% block heading %}Received Messages{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    {% if messages %}
+    <div class="admin-table-wrap">
+        <table>
+            <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Message</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for msg in messages %}
+                <tr>
+                    <td>{{ msg.created_at.strftime('%b %d, %Y') if msg.created_at else '' }}</td>
+                    <td>{{ msg.name }}</td>
+                    <td>{{ msg.email }}</td>
+                    <td>{{ msg.message }}</td>
+                    <td class="action-links">
+                        {{ delete_button(url_for('admin.delete_message', message_id=msg.id), delete_form, confirm_msg="Delete this message?") }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p style="text-align:center; color:#666;">No messages found.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

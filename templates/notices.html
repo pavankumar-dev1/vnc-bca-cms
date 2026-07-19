@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Notices | {{ site_settings.college_name if site_settings else "VNC BCA" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .notice-list { list-style: none; max-width: 800px; margin: 0 auto; }
+        .notice-item {
+            background: white;
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 0 10px 10px 0;
+            transition: 0.3s;
+        }
+        .notice-item.pinned { border-left-color: var(--accent); }
+        .notice-item:hover { transform: translateX(10px); }
+        .date-badge {
+            background: var(--accent);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .pin-badge {
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .expired-badge {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .notice-item a.pdf-link { display:inline-block; margin-top:10px; font-weight:600; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Notice Board</div>
+        <ul class="nav-links">
+            <li><a href="/">Back Home</a></li>
+        </ul>
+    </nav>
+
+    <div class="container section">
+        <h2 class="section-title" data-aos="fade-down">Latest Updates</h2>
+
+        <ul class="notice-list">
+            {% for notice in notices %}
+            <li class="notice-item {{ 'pinned' if notice.pinned }}" data-aos="fade-right" data-aos-delay="{{ loop.index0 * 50 }}">
+                <span class="date-badge">{{ notice.publish_date.strftime('%b %d, %Y') if notice.publish_date else '' }}</span>
+                {% if notice.pinned %}<span class="pin-badge"><i class="fas fa-thumbtack"></i> Pinned</span>{% endif %}
+                {% if notice.is_expired %}<span class="expired-badge">Expired</span>{% endif %}
+                <h3>{{ notice.title }}</h3>
+                <p>{{ notice.description }}</p>
+                {% if notice.pdf_path %}
+                <details style="margin-top:10px;">
+                    <summary style="cursor:pointer; font-weight:600; color:var(--primary);"><i class="fas fa-file-pdf"></i> Preview Attachment</summary>
+                    <iframe src="{{ url_for('static', filename=notice.pdf_path) }}" style="width:100%; height:480px; border:none; margin-top:10px; border-radius:8px; background:#f5f5f5;"></iframe>
+                    <p style="margin-top:6px;"><a href="{{ url_for('static', filename=notice.pdf_path) }}" target="_blank" class="pdf-link">Open in new tab</a></p>
+                </details>
+                {% endif %}
+            </li>
+            {% else %}
+            <p style="text-align:center; color:#666;">No notices published yet.</p>
+            {% endfor %}
+        </ul>
+
+        <p style="text-align:center; margin-top:30px;">
+            {% if show_all %}
+                <a href="{{ url_for('public.notices') }}">Hide expired notices</a>
+            {% else %}
+                <a href="{{ url_for('public.notices', all=1) }}">Show expired notices too</a>
+            {% endif %}
+        </p>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
+</html>

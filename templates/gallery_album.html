@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ album.name }} | {{ site_settings.college_name if site_settings else "VNC BCA" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .empty-state { text-align: center; padding: 50px; color: #888; font-size: 1.2rem; grid-column: 1 / -1; }
+        .gallery-item .caption { position:absolute; bottom:0; left:0; right:0; background:rgba(10,37,88,0.75); color:#fff; padding:8px 12px; font-size:0.85rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">{{ album.name }}</div>
+        <ul class="nav-links">
+            <li><a href="/gallery">All Albums</a></li>
+            <li><a href="/">Back Home</a></li>
+        </ul>
+    </nav>
+
+    <div class="container section">
+        <h2 class="section-title" data-aos="fade-down">{{ album.name }}</h2>
+
+        <div class="gallery-grid">
+            {% for image in album.images %}
+            <div class="gallery-item" data-aos="fade-up">
+                <img src="{{ url_for('static', filename=image.image) }}" alt="{{ image.caption or album.name }}">
+                {% if image.caption %}<div class="caption">{{ image.caption }}</div>{% endif %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-images fa-3x" style="margin-bottom:20px; color:#ccc;"></i>
+                <p>No images in this album yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/gallery" class="btn-primary" style="display:inline-block;">Back to Gallery</a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
+</html>

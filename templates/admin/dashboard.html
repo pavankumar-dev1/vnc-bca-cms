@@ -1,0 +1,35 @@
+{% extends "admin/_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Welcome, Admin{% endblock %}
+{% block content %}
+
+<div class="stat-grid">
+    <div class="stat-box"><div class="num">{{ counts.faculty }}</div><div class="label">Faculty Members</div></div>
+    <div class="stat-box"><div class="num">{{ counts.events }}</div><div class="label">Events</div></div>
+    <div class="stat-box"><div class="num">{{ counts.notices }}</div><div class="label">Notices</div></div>
+    <div class="stat-box"><div class="num">{{ counts.gallery_images }}</div><div class="label">Gallery Images</div></div>
+    <div class="stat-box"><div class="num">{{ counts.messages }}</div><div class="label">Contact Messages</div></div>
+</div>
+
+<div class="admin-card">
+    <h2>Manage Website Content</h2>
+    <div class="module-grid">
+        <a class="module-card" href="{{ url_for('admin.admin_home') }}"><i class="fas fa-house"></i> Home Page</a>
+        <a class="module-card" href="{{ url_for('admin.admin_faculty') }}"><i class="fas fa-chalkboard-user"></i> Faculty</a>
+        <a class="module-card" href="{{ url_for('admin.admin_events') }}"><i class="fas fa-calendar-days"></i> Events</a>
+        <a class="module-card" href="{{ url_for('admin.admin_notices') }}"><i class="fas fa-bullhorn"></i> Notices</a>
+        <a class="module-card" href="{{ url_for('admin.admin_about') }}"><i class="fas fa-circle-info"></i> About College</a>
+        <a class="module-card" href="{{ url_for('admin.admin_contact') }}"><i class="fas fa-address-book"></i> Contact Info</a>
+        <a class="module-card" href="{{ url_for('admin.admin_gallery') }}"><i class="fas fa-images"></i> Gallery</a>
+        <a class="module-card" href="{{ url_for('admin.admin_settings') }}"><i class="fas fa-gear"></i> Website Settings</a>
+        <a class="module-card" href="{{ url_for('admin.admin_messages') }}"><i class="fas fa-envelope"></i> Messages</a>
+    </div>
+</div>
+
+<div class="admin-card">
+    <h2>Database Backup</h2>
+    <p style="margin-bottom:15px; color:var(--text-muted);">Download a snapshot of the current database (SQLite only).</p>
+    <a href="{{ url_for('admin.download_backup') }}" class="btn btn-save" style="text-decoration:none; display:inline-block;"><i class="fas fa-download"></i> Download Backup</a>
+</div>
+
+{% endblock %}

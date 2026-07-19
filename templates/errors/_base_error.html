@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ code }} - {{ heading }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container" style="max-width: 600px; margin-top: 120px; text-align: center;">
+        <h1 style="font-size: 4rem; color: var(--primary); margin-bottom: 0;">{{ code }}</h1>
+        <h2>{{ heading }}</h2>
+        <p style="color: #666; margin: 20px 0;">{{ message }}</p>
+        <a href="/" class="btn-primary" style="display:inline-block;">Back Home</a>
+    </div>
+</body>
+</html>

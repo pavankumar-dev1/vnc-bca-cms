@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ event.title }} | {{ site_settings.college_name if site_settings else "VNC BCA" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .status-badge { display:inline-block; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:700; margin-bottom:12px; }
+        .status-upcoming { background:#fefcbf; color:#744210; }
+        .status-completed { background:#c6f6d5; color:#22543d; }
+        .event-meta { color: var(--text-muted); margin-bottom:20px; }
+        .event-cover { width:100%; max-height:400px; object-fit:cover; border-radius:15px; margin-bottom:25px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Events</div>
+        <ul class="nav-links"><li><a href="/event">All Events</a></li><li><a href="/">Back Home</a></li></ul>
+    </nav>
+
+    <div class="container section">
+        <span class="status-badge status-{{ event.status }}">{{ event.status|capitalize }}</span>
+        <h2 class="section-title" style="text-align:left;" data-aos="fade-down">{{ event.title }}</h2>
+        <p class="event-meta"><i class="fas fa-calendar"></i> {{ event.event_date.strftime('%b %d, %Y') if event.event_date else '' }}
+            {% if event.venue %} &nbsp;|&nbsp; <i class="fas fa-location-dot"></i> {{ event.venue }}{% endif %}</p>
+
+        {% if event.cover_image %}<img src="{{ url_for('static', filename=event.cover_image) }}" class="event-cover">{% endif %}
+
+        <p style="max-width:800px; line-height:1.8;">{{ event.description }}</p>
+
+        {% if event.images %}
+        <h3 style="margin-top:50px; margin-bottom:20px; color:var(--primary);">Photos</h3>
+        <div class="gallery-grid">
+            {% for image in event.images %}
+            <div class="gallery-item" data-aos="fade-up">
+                <img src="{{ url_for('static', filename=image.image) }}" alt="{{ image.caption or event.title }}">
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="/event" class="btn-primary" style="display:inline-block;">Back to Events</a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
+</html>

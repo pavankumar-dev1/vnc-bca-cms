@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ album.name if album else "Gallery" }} | VNC BCA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .empty-state { text-align: center; padding: 50px; color: #888; font-size: 1.2rem; grid-column: 1 / -1; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">VNC Gallery</div>
+        <ul class="nav-links">
+            <li><a href="/">Back Home</a></li>
+        </ul>
+    </nav>
+
+    <div class="container section">
+        <h2 class="section-title" data-aos="fade-down">{{ album.name if album else "Campus & Building" }}</h2>
+
+        <div class="gallery-grid">
+            {% if album and album.images %}
+                {% for image in album.images %}
+                <div class="gallery-item" data-aos="fade-up">
+                    <img src="{{ url_for('static', filename=image.image) }}" alt="Gallery Image">
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-images fa-3x" style="margin-bottom:20px; color:#ccc;"></i>
+                    <p>No images found in this album yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Vijayanagara College.</p>
+        {% if site_settings and site_settings.show_developer_button and site_settings.developer_name %}
+        <p style="font-size:0.8rem; margin-top:8px; color:#999;">
+            <a href="{{ site_settings.developer_url if site_settings.developer_url else url_for('public.developer') }}"
+               {% if site_settings.developer_url %}target="_blank" rel="noopener"{% endif %}>Developed by {{ site_settings.developer_name }}</a>
+        </p>
+        {% endif %}
+        <a href="{{ url_for('admin.login') }}" style="display:inline-block; width:10px; height:10px; margin-top:10px; opacity:0.12; text-decoration:none;">&middot;</a>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
+</html>

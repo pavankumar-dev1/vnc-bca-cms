@@ -1,0 +1,44 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field, delete_button %}
+{% block title %}Statistics{% endblock %}
+{% block heading %}Statistics / Counters{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    <h2>Add Statistic</h2>
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ field(form.label) }}
+        {{ field(form.value) }}
+        {{ field(form.icon, hint="Font Awesome class, e.g. fa-solid fa-award") }}
+        {{ field(form.display_order) }}
+        <button type="submit" class="btn btn-save">Add</button>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Existing Statistics</h2>
+    <div class="admin-table-wrap">
+        <table>
+            <thead><tr><th>Order</th><th>Label</th><th>Value</th><th>Icon</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for stat in stats %}
+                <tr>
+                    <td>{{ stat.display_order }}</td>
+                    <td>{{ stat.label }}</td>
+                    <td>{{ stat.value }}</td>
+                    <td><i class="{{ stat.icon }}"></i></td>
+                    <td class="action-links">
+                        <a href="{{ url_for('admin.edit_home_stat', stat_id=stat.id) }}"><i class="fas fa-edit"></i> Edit</a>
+                        {{ delete_button(url_for('admin.delete_home_stat', stat_id=stat.id), delete_form, confirm_msg="Delete this statistic?") }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" style="text-align:center;">No statistics yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

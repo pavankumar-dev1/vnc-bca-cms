@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_settings.college_name if site_settings else "VNC BCA" }}</title>
+    {% if site_settings and site_settings.favicon %}<link rel="icon" href="{{ url_for('static', filename=site_settings.favicon) }}">{% endif %}
+
+    {% if site_settings and site_settings.meta_description %}<meta name="description" content="{{ site_settings.meta_description }}">{% endif %}
+    {% if site_settings and site_settings.meta_keywords %}<meta name="keywords" content="{{ site_settings.meta_keywords }}">{% endif %}
+    <meta property="og:title" content="{{ site_settings.college_name if site_settings else 'VNC BCA' }}">
+    {% if site_settings and site_settings.meta_description %}<meta property="og:description" content="{{ site_settings.meta_description }}">{% endif %}
+    {% if site_settings and site_settings.og_image %}<meta property="og:image" content="{{ url_for('static', filename=site_settings.og_image) }}">{% endif %}
+
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="theme-color" content="#0a2558">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        .leader-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            padding: 3px;
+            background: white;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+        .card:hover .leader-img {
+            transform: scale(1.1);
+            border-color: var(--accent);
+        }
+        .stat-card { text-align: center; }
+        .stat-card .icon-box i { font-size: 1.8rem; }
+        .stat-card .stat-value { font-size: 2.2rem; font-weight: 800; color: var(--primary); }
+        .stat-card .stat-label { color: var(--text-muted); }
+        .cta-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .contact-info-box { max-width: 700px; margin: 0 auto 40px; text-align: center; }
+        .contact-info-box p { margin-bottom: 8px; }
+        .social-row { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .social-row a { font-size: 1.4rem; color: var(--primary); }
+        .social-row a:hover { color: var(--accent); }
+        .theme-toggle, .search-toggle { background:none; border:none; color:inherit; font-size:1.1rem; cursor:pointer; margin-left:15px; }
+        .search-box { display:flex; gap:6px; margin-left:15px; }
+        .search-box input { padding:6px 10px; border-radius:6px; border:1px solid #ccc; font-size:0.85rem; width:150px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            {% if site_settings and site_settings.logo %}
+                <img src="{{ url_for('static', filename=site_settings.logo) }}" alt="Logo" style="height:40px; vertical-align:middle;">
+            {% else %}
+                {{ site_settings.college_name if site_settings else "VNC BCA" }}
+            {% endif %}
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/staff">Faculty</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/event">Events</a></li>
+            <li><a href="/notices">Notices</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+        </ul>
+        <form action="{{ url_for('public.search') }}" method="GET" class="search-box">
+            <input type="text" name="q" placeholder="Search the site..." aria-label="Search">
+            <button type="submit" class="theme-toggle" aria-label="Search"><i class="fas fa-search"></i></button>
+        </form>
+        <button type="button" class="theme-toggle" id="themeToggleBtn" aria-label="Toggle dark mode" title="Toggle dark/light mode"><i class="fas fa-moon"></i></button>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" data-aos="fade-down">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <header class="hero" {% if home and home.banner_image %}style="background-image: linear-gradient(to bottom, rgba(10, 37, 88, 0.6), rgba(10, 37, 88, 0.7)), url('{{ url_for('static', filename=home.banner_image) }}');"{% endif %}>
+        <h1 data-aos="fade-up">{{ home.hero_title if home else "Vijayanagara College" }}</h1>
+        {% if home and home.hero_subtitle %}<p data-aos="fade-up" data-aos-delay="200">{{ home.hero_subtitle }}</p>{% endif %}
+        <div class="cta-row" data-aos="fade-up" data-aos-delay="400">
+            {% if home and home.hero_cta_text %}
+                <a href="{{ home.hero_cta_link or '#contact' }}" class="btn-primary">{{ home.hero_cta_text }}</a>
+            {% endif %}
+            {% for button in cta_buttons %}
+                <a href="{{ button.link }}" class="btn-primary">{{ button.text }}</a>
+            {% endfor %}
+        </div>
+    </header>
+
+    {% if home and home.welcome_message %}
+    <section class="section">
+        <div class="container">
+            {% if home.welcome_title %}<h2 class="section-title" data-aos="fade-up">{{ home.welcome_title }}</h2>{% endif %}
+            <p style="max-width:800px; margin:0 auto; text-align:center; color:var(--text-muted);" data-aos="fade-up">{{ home.welcome_message }}</p>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if features %}
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Why Choose {{ site_settings.college_name if site_settings else "Us" }}?</h2>
+            <div class="grid-3">
+                {% for feature in features %}
+                <div class="card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                    {% if feature.image %}
+                    <img src="{{ url_for('static', filename=feature.image) }}" class="feature-img" onerror="this.src='https://via.placeholder.com/300'">
+                    {% endif %}
+                    <h3>{{ feature.title }}</h3>
+                    <p>{{ feature.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if stats %}
+    <section class="section" style="background-color: #f8f9fa; padding-top:60px; padding-bottom:60px;">
+        <div class="container">
+            <div class="grid-3">
+                {% for stat in stats %}
+                <div class="card stat-card" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 100 }}">
+                    <div class="icon-box"><i class="{{ stat.icon }}"></i></div>
+                    <div class="stat-value">{{ stat.value }}</div>
+                    <div class="stat-label">{{ stat.label }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if leaders %}
+    <section class="section" style="background-color: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Department Leadership</h2>
+            <div class="grid-3" style="justify-content: center;">
+                {% for leader in leaders %}
+                <div class="card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                    {% if leader.photo %}
+                    <img src="{{ url_for('static', filename=leader.photo) }}" class="leader-img" onerror="this.src='https://via.placeholder.com/150'">
+                    {% endif %}
+                    <h3>{{ leader.name }}</h3>
+                    <p style="color:var(--primary); font-weight:bold;">{{ leader.designation }}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div style="text-align:center; margin-top:40px;" data-aos="fade-up">
+                <a href="/staff" class="btn-primary">View All Faculty</a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title" data-aos="zoom-in">Get In Touch</h2>
+
+            {% if contact_info and (contact_info.address or contact_info.phone1 or contact_info.email) %}
+            <div class="contact-info-box" data-aos="fade-up">
+                {% if contact_info.address %}<p><i class="fas fa-location-dot"></i> {{ contact_info.address }}</p>{% endif %}
+                {% if contact_info.phone1 %}<p><i class="fas fa-phone"></i> {{ contact_info.phone1 }}{% if contact_info.phone2 %} / {{ contact_info.phone2 }}{% endif %}</p>{% endif %}
+                {% if contact_info.email %}<p><i class="fas fa-envelope"></i> {{ contact_info.email }}</p>{% endif %}
+                {% if social_links %}
+                <div class="social-row">
+                    {% for link in social_links %}
+                    <a href="{{ link.url }}" target="_blank" rel="noopener" title="{{ link.platform }}"><i class="{{ link.icon }}"></i></a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if contact_info.maps_link %}
+                <p style="margin-top:15px;"><a href="{{ contact_info.maps_link }}" target="_blank" rel="noopener" class="btn-primary" style="padding:10px 25px; font-size:0.8rem;">View on Google Maps</a></p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <form action="/contact" method="POST" class="contact-form" data-aos="fade-up">
+                {{ form.csrf_token }}
+                <div class="input-group">
+                    <input type="text" name="name" placeholder="Your Full Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Your Email Address" required>
+                </div>
+                <div class="input-group">
+                    <textarea name="message" rows="5" placeholder="Write your message here..." required></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>{{ site_settings.copyright_text if site_settings and site_settings.copyright_text else "&copy; 2026 " + (site_settings.college_name if site_settings else "Vijayanagara College") }}</p>
+            {% if site_settings and site_settings.footer_text %}
+            <p style="font-size: 0.8rem; margin-top: 8px; color: #999;">{{ site_settings.footer_text }}</p>
+            {% endif %}
+            {% if site_settings and site_settings.show_developer_button and site_settings.developer_name %}
+            <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">
+                <a href="{{ site_settings.developer_url if site_settings.developer_url else url_for('public.developer') }}"
+                   {% if site_settings.developer_url %}target="_blank" rel="noopener"{% endif %}
+                   style="color: var(--accent);">
+                    <i class="fas fa-code"></i> Developed by {{ site_settings.developer_name }}
+                </a>
+            </p>
+            {% endif %}
+            <a href="{{ url_for('admin.login') }}" style="display:inline-block; width:10px; height:10px; margin-top:15px; opacity:0.12; color:inherit; text-decoration:none;">&middot;</a>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // --- Dark / light mode toggle ---
+        (function () {
+            var root = document.documentElement;
+            var btn = document.getElementById('themeToggleBtn');
+            var saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                root.setAttribute('data-theme', 'dark');
+            }
+            function updateIcon() {
+                var icon = btn.querySelector('i');
+                var isDark = root.getAttribute('data-theme') === 'dark';
+                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            }
+            if (btn) {
+                updateIcon();
+                btn.addEventListener('click', function () {
+                    var isDark = root.getAttribute('data-theme') === 'dark';
+                    if (isDark) {
+                        root.removeAttribute('data-theme');
+                        localStorage.setItem('theme', 'light');
+                    } else {
+                        root.setAttribute('data-theme', 'dark');
+                        localStorage.setItem('theme', 'dark');
+                    }
+                    updateIcon();
+                });
+            }
+        })();
+
+        // --- Basic PWA install support ---
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{{ url_for('static', filename='sw.js') }}").catch(function () {});
+        }
+    </script>
+</body>
+</html>

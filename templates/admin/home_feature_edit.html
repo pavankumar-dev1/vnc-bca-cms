@@ -1,0 +1,18 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field %}
+{% block title %}Edit Featured Section{% endblock %}
+{% block heading %}Edit Featured Section{% endblock %}
+{% block content %}
+<div class="admin-card">
+    {% if feature.image %}<img src="{{ url_for('static', filename=feature.image) }}" class="thumb" style="width:120px;height:80px;margin-bottom:15px;">{% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ field(form.title) }}
+        {{ field(form.description) }}
+        {{ field(form.image, hint="Leave blank to keep the current image.") }}
+        {{ field(form.display_order) }}
+        <button type="submit" class="btn btn-save">Save</button>
+        <a href="{{ url_for('admin.admin_home_features') }}" class="btn btn-cancel">Cancel</a>
+    </form>
+</div>
+{% endblock %}

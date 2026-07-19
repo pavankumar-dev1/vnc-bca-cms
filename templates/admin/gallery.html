@@ -1,0 +1,52 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field, delete_button %}
+{% block title %}Gallery{% endblock %}
+{% block heading %}Gallery Management{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    <h2>Create Album / Category</h2>
+    <form method="POST">
+        {{ album_form.csrf_token }}
+        {{ field(album_form.name) }}
+        {{ field(album_form.category, hint="Used in the URL, e.g. 'sports-day'. Letters, numbers, hyphens only.") }}
+        {{ field(album_form.display_order) }}
+        <button type="submit" class="btn btn-save">Create Album</button>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Upload Image</h2>
+    <form method="POST" action="{{ url_for('admin.add_gallery_image') }}" enctype="multipart/form-data">
+        {{ image_form.csrf_token }}
+        {{ field(image_form.album_id) }}
+        {{ field(image_form.image) }}
+        {{ field(image_form.caption) }}
+        {{ field(image_form.display_order) }}
+        <button type="submit" class="btn btn-save">Upload</button>
+    </form>
+</div>
+
+{% for album in albums %}
+<div class="admin-card">
+    <h2>{{ album.name }} <small style="color:var(--text-muted); font-weight:400;">(/{{ album.category }})</small></h2>
+    {{ delete_button(url_for('admin.delete_gallery_album', album_id=album.id), delete_form, label="Delete Album", confirm_msg="Delete album '" + album.name + "' and all its images?") }}
+
+    <div class="module-grid" style="margin-top:20px;">
+        {% for image in album.images %}
+        <div class="admin-card" style="padding:15px;">
+            <img src="{{ url_for('static', filename=image.image) }}" style="width:100%; height:140px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
+            <p>{{ image.caption or "No caption" }}</p>
+            <a href="{{ url_for('admin.edit_gallery_image', image_id=image.id) }}"><i class="fas fa-edit"></i> Edit</a>
+            {{ delete_button(url_for('admin.delete_gallery_image', image_id=image.id), delete_form, confirm_msg="Delete this image?") }}
+        </div>
+        {% else %}
+        <p>No images in this album yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<p>No albums yet - create one above.</p>
+{% endfor %}
+
+{% endblock %}

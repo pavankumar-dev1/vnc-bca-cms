@@ -1,0 +1,20 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field %}
+{% block title %}Edit Notice{% endblock %}
+{% block heading %}Edit Notice{% endblock %}
+{% block content %}
+<div class="admin-card">
+    {% if notice.pdf_path %}<p><a href="{{ url_for('static', filename=notice.pdf_path) }}" target="_blank">Current PDF attachment</a></p>{% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ field(form.title) }}
+        {{ field(form.description) }}
+        {{ field(form.pdf_attachment, hint="Leave blank to keep the current attachment.") }}
+        {{ field(form.publish_date) }}
+        {{ field(form.expiry_date) }}
+        <div class="form-group">{{ form.pinned() }} {{ form.pinned.label }}</div>
+        <button type="submit" class="btn btn-save">Save Changes</button>
+        <a href="{{ url_for('admin.admin_notices') }}" class="btn btn-cancel">Cancel</a>
+    </form>
+</div>
+{% endblock %}

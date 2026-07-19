@@ -1,0 +1,64 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field, delete_button %}
+{% block title %}Faculty{% endblock %}
+{% block heading %}Faculty Management{% endblock %}
+{% block content %}
+
+<div class="admin-card">
+    <h2>CSV Import / Export</h2>
+    <p style="margin-bottom:15px;"><a href="{{ url_for('admin.export_faculty_csv') }}"><i class="fas fa-file-export"></i> Export all faculty to CSV (opens in Excel)</a></p>
+    <form method="POST" action="{{ url_for('admin.import_faculty_csv') }}" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            <label class="form-label">Import faculty from CSV</label>
+            <input type="file" name="csv_file" accept=".csv" class="form-control">
+            <div class="form-hint">Columns: name, department, designation, qualification, email, phone, display_order, is_leadership. Photos aren't imported - add them by editing each entry afterwards.</div>
+        </div>
+        <button type="submit" class="btn btn-save">Import CSV</button>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Add Faculty Member</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ field(form.name) }}
+        {{ field(form.department) }}
+        {{ field(form.designation) }}
+        {{ field(form.qualification) }}
+        {{ field(form.email) }}
+        {{ field(form.phone) }}
+        {{ field(form.photo) }}
+        {{ field(form.display_order) }}
+        <div class="form-group">{{ form.is_leadership() }} {{ form.is_leadership.label }}</div>
+        <button type="submit" class="btn btn-save">Add Faculty</button>
+    </form>
+</div>
+
+<div class="admin-card">
+    <h2>Existing Faculty ({{ faculty_list|length }})</h2>
+    <div class="admin-table-wrap">
+        <table>
+            <thead><tr><th>Photo</th><th>Name</th><th>Designation</th><th>Order</th><th>Home?</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for member in faculty_list %}
+                <tr>
+                    <td>{% if member.photo %}<img src="{{ url_for('static', filename=member.photo) }}" class="thumb" style="border-radius:50%;">{% endif %}</td>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.designation }}</td>
+                    <td>{{ member.display_order }}</td>
+                    <td>{% if member.is_leadership %}<span class="badge badge-completed">Yes</span>{% endif %}</td>
+                    <td class="action-links">
+                        <a href="{{ url_for('admin.edit_faculty', faculty_id=member.id) }}"><i class="fas fa-edit"></i> Edit</a>
+                        {{ delete_button(url_for('admin.delete_faculty', faculty_id=member.id), delete_form, confirm_msg="Delete " + member.name + "?") }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" style="text-align:center;">No faculty added yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

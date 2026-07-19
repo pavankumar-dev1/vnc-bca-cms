@@ -1,0 +1,102 @@
+/* =========================================
+   FACULTY LIST VIEW STYLES
+   ========================================= */
+
+/* 1. The Header Section */
+.faculty-header {
+    /* Uses your main blue theme but with a gradient for style */
+    background: linear-gradient(135deg, #0a2558, #1e4c9a); 
+    color: white;
+    text-align: center;
+    padding: 70px 20px;
+    margin-bottom: 50px;
+    border-bottom: 5px solid #ff9f1c; /* Accent Orange Border */
+}
+
+.faculty-header h1 {
+    font-size: 3rem;
+    margin: 0;
+    font-family: "Playfair Display", serif; /* Premium Font */
+    letter-spacing: 1px;
+}
+
+.faculty-header p {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+/* 2. The Main List Container */
+.faculty-list {
+    max-width: 900px;
+    margin: 0 auto 60px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Space between cards */
+    padding: 0 20px;
+}
+
+/* 3. The Individual Card */
+.faculty-card {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08); /* Soft shadow */
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Hover Effect: Lifts up */
+.faculty-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* 4. The Staff Image */
+.faculty-card img {
+    width: 200px;  /* Fixed width */
+    height: 220px; /* Fixed height */
+    object-fit: cover; /* Ensures face isn't stretched */
+    border-right: 5px solid #ff9f1c; /* Orange separator line */
+}
+
+/* 5. The Text Info Area */
+.faculty-info {
+    padding: 20px 30px;
+}
+
+.faculty-info h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.6rem;
+    color: #0a2558; /* Royal Navy */
+    font-family: "Playfair Display", serif;
+}
+
+.faculty-info p {
+    margin: 0;
+    color: #555;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* 6. Mobile Responsiveness */
+@media (max-width: 768px) {
+    .faculty-card {
+        flex-direction: column; /* Stack image on top of text */
+        text-align: center;
+    }
+
+    .faculty-card img {
+        width: 100%; /* Full width image */
+        height: 250px;
+        border-right: none;
+        border-bottom: 5px solid #ff9f1c; /* Line moves to bottom */
+    }
+
+    .faculty-info {
+        padding: 20px;
+    }
+}

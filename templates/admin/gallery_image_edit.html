@@ -1,0 +1,16 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field %}
+{% block title %}Edit Image{% endblock %}
+{% block heading %}Edit Image Caption{% endblock %}
+{% block content %}
+<div class="admin-card">
+    <img src="{{ url_for('static', filename=image.image) }}" style="max-width:300px; border-radius:8px; margin-bottom:15px;">
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ field(form.caption) }}
+        {{ field(form.display_order) }}
+        <button type="submit" class="btn btn-save">Save</button>
+        <a href="{{ url_for('admin.admin_gallery') }}" class="btn btn-cancel">Cancel</a>
+    </form>
+</div>
+{% endblock %}

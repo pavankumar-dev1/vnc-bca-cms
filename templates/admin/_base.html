@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} | {{ site_settings.college_name if site_settings else "Admin" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="admin-body">
+    <aside class="admin-sidebar">
+        <div class="brand"><i class="fas fa-graduation-cap"></i> Admin Panel</div>
+        <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if request.endpoint == 'admin.dashboard' }}"><i class="fas fa-gauge"></i> Dashboard</a>
+        <a href="{{ url_for('admin.admin_home') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('admin.admin_home') }}"><i class="fas fa-house"></i> Home Page</a>
+        <a href="{{ url_for('admin.admin_faculty') }}" class="{{ 'active' if request.endpoint in ['admin.admin_faculty','admin.edit_faculty'] }}"><i class="fas fa-chalkboard-user"></i> Faculty</a>
+        <a href="{{ url_for('admin.admin_events') }}" class="{{ 'active' if request.endpoint in ['admin.admin_events','admin.edit_event'] }}"><i class="fas fa-calendar-days"></i> Events</a>
+        <a href="{{ url_for('admin.admin_notices') }}" class="{{ 'active' if request.endpoint in ['admin.admin_notices','admin.edit_notice'] }}"><i class="fas fa-bullhorn"></i> Notices</a>
+        <a href="{{ url_for('admin.admin_about') }}" class="{{ 'active' if request.endpoint == 'admin.admin_about' }}"><i class="fas fa-circle-info"></i> About College</a>
+        <a href="{{ url_for('admin.admin_contact') }}" class="{{ 'active' if request.endpoint == 'admin.admin_contact' }}"><i class="fas fa-address-book"></i> Contact</a>
+        <a href="{{ url_for('admin.admin_gallery') }}" class="{{ 'active' if request.endpoint == 'admin.admin_gallery' }}"><i class="fas fa-images"></i> Gallery</a>
+        <a href="{{ url_for('admin.admin_settings') }}" class="{{ 'active' if request.endpoint == 'admin.admin_settings' }}"><i class="fas fa-gear"></i> Website Settings</a>
+        {% if session.get('role') == 'developer' %}
+        <a href="{{ url_for('admin.admin_developer_tools') }}" class="{{ 'active' if request.endpoint == 'admin.admin_developer_tools' }}"><i class="fas fa-code"></i> Developer Tools</a>
+        {% endif %}
+        <a href="{{ url_for('admin.admin_messages') }}" class="{{ 'active' if request.endpoint == 'admin.admin_messages' }}"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="{{ url_for('admin.change_password') }}" class="{{ 'active' if request.endpoint == 'admin.change_password' }}"><i class="fas fa-key"></i> Change Password</a>
+        <a href="{{ url_for('public.index') }}"><i class="fas fa-arrow-up-right-from-square"></i> View Site</a>
+        <a href="{{ url_for('admin.logout') }}"><i class="fas fa-right-from-bracket"></i> Logout</a>
+    </aside>
+
+    <main class="admin-main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="admin-topbar">
+            <h1>{% block heading %}{% endblock %}</h1>
+        </div>
+
+        {% block content %}{% endblock %}
+    </main>
+</div>
+</body>
+</html>

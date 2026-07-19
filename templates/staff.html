@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Faculty | {{ site_settings.college_name if site_settings else "VNC BCA" }}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">{{ site_settings.college_name if site_settings else "VNC Faculty" }}</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/event">Events</a></li>
+        </ul>
+    </nav>
+
+    <header class="faculty-header">
+        <h1>&#127891; Our Faculty</h1>
+        <p>Excellence &bull; Dedication &bull; Knowledge</p>
+    </header>
+
+    <main>
+        <section class="faculty-list">
+            {% for member in faculty %}
+            <div class="faculty-card">
+                {% if member.photo %}
+                <img src="{{ url_for('static', filename=member.photo) }}" alt="{{ member.name }}" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+                {% else %}
+                <img src="https://via.placeholder.com/200?text=No+Image" alt="{{ member.name }}">
+                {% endif %}
+                <div class="faculty-info">
+                    <h2>{{ member.name }}</h2>
+                    <p>{{ member.designation }}</p>
+                    {% if member.qualification %}<p style="font-size:0.9rem; color:#888;">{{ member.qualification }}</p>{% endif %}
+                    {% if member.email or member.phone %}
+                    <p style="font-size:0.85rem; color:#888;">
+                        {% if member.email %}<i class="fas fa-envelope"></i> {{ member.email }}{% endif %}
+                        {% if member.phone %} &nbsp;|&nbsp; <i class="fas fa-phone"></i> {{ member.phone }}{% endif %}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <p style="text-align:center; color:#666;">Faculty information will be added soon.</p>
+            {% endfor %}
+        </section>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="/" class="btn-primary" style="display:inline-block;">Back Home</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>{{ site_settings.copyright_text if site_settings and site_settings.copyright_text else "&copy; 2026 Vijayanagara College BCA Dept." }}</p>
+        {% if site_settings and site_settings.show_developer_button and site_settings.developer_name %}
+        <p style="font-size:0.8rem; margin-top:8px; color:#999;">
+            <a href="{{ site_settings.developer_url if site_settings.developer_url else url_for('public.developer') }}"
+               {% if site_settings.developer_url %}target="_blank" rel="noopener"{% endif %}>Developed by {{ site_settings.developer_name }}</a>
+        </p>
+        {% endif %}
+        <a href="{{ url_for('admin.login') }}" style="display:inline-block; width:10px; height:10px; margin-top:10px; opacity:0.12; text-decoration:none;">&middot;</a>
+    </footer>
+
+</body>
+</html>

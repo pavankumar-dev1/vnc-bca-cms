@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Profile | Pavan Kumar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/developerdesign.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <div class="card-container">
+        <div class="cyber-card">
+            <div class="scanner-line"></div>
+            
+            <div class="identity-section">
+                <div class="img-container">
+                    <img src="{{ url_for('static', filename='images/pavan.jpg') }}" alt="Pavan" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Pavan'">
+                </div>
+                <div class="identity-text">
+                    <h1 class="glitch" data-text="PAVAN KUMAR">PAVAN KUMAR</h1>
+                    <p class="role">WEB DEVELOPER | BCA STUDENT</p>
+                    <p class="sub-role">Vijayanagara College of Computer Applications</p>
+                </div>
+            </div>
+
+            <div class="terminal-window">
+                
+                <div class="console-line">
+                    <span class="prompt">root@bca:~$</span> cat about_developer.txt
+                </div>
+                <div class="output-text">
+                    I am a BCA student with a strong interest in Web Dev, UI/UX, and Backend logic. 
+                    Passionate about building responsive websites using modern tools like Python Flask & JS.
+                </div>
+
+                <div class="console-line">
+                    <span class="prompt">root@bca:~$</span> ./show_project_logs.sh
+                </div>
+                <ul class="log-list">
+                    <li><span class="success">[✔]</span> Designed Complete Department Website</li>
+                    <li><span class="success">[✔]</span> Integrated SQLite Database & Admin Login</li>
+                    <li><span class="success">[✔]</span> Implemented Dynamic Gallery & Event Systems</li>
+                    <li><span class="success">[✔]</span> Ensured 100% Responsive UI/UX</li>
+                </ul>
+
+                <div class="console-line">
+                    <span class="prompt">root@bca:~$</span> list --skills
+                </div>
+                <div class="skills-grid">
+                    <div class="skill-box html"><i class="fab fa-html5"></i> HTML5</div>
+                    <div class="skill-box css"><i class="fab fa-css3-alt"></i> CSS3</div>
+                    <div class="skill-box js"><i class="fab fa-js"></i> JS</div>
+                    <div class="skill-box py"><i class="fab fa-python"></i> FLASK</div>
+                    <div class="skill-box db"><i class="fas fa-database"></i> SQLITE</div>
+                    <div class="skill-box git"><i class="fab fa-git-alt"></i> GIT</div>
+                </div>
+            </div>
+
+            <div class="socials">
+                <a href="mailto:shettypavan082@gmail.com" class="cyber-btn">
+                    <i class="fas fa-envelope"></i> CONTACT: shettypavan082@gmail.com
+                </a>
+            </div>
+
+            <a href="/" class="return-link">[ DISCONNECT SESSION ]</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80 },
+                "color": { "value": "#00d4ff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5 },
+                "size": { "value": 3 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00d4ff", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 1.5 }
+            }
+        });
+    </script>
+</body>
+</html>

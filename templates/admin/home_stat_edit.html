@@ -1,0 +1,17 @@
+{% extends "admin/_base.html" %}
+{% from "admin/_macros.html" import field %}
+{% block title %}Edit Statistic{% endblock %}
+{% block heading %}Edit Statistic{% endblock %}
+{% block content %}
+<div class="admin-card">
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ field(form.label) }}
+        {{ field(form.value) }}
+        {{ field(form.icon) }}
+        {{ field(form.display_order) }}
+        <button type="submit" class="btn btn-save">Save</button>
+        <a href="{{ url_for('admin.admin_home_stats') }}" class="btn btn-cancel">Cancel</a>
+    </form>
+</div>
+{% endblock %}

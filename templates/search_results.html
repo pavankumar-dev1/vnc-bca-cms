@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Search{% if q %} - {{ q }}{% endif %} | {{ site_settings.college_name if site_settings else "VNC BCA" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .result-group { margin-bottom: 40px; }
+        .result-group h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--accent); display:inline-block; padding-bottom:4px; }
+        .result-row { padding: 15px; background: var(--white); border-radius: 10px; margin-bottom: 10px; box-shadow: var(--shadow-soft); }
+        .result-row a { font-weight: 700; color: var(--primary); }
+        .result-row p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Search</div>
+        <ul class="nav-links"><li><a href="/">Back Home</a></li></ul>
+    </nav>
+
+    <div class="container section">
+        <h2 class="section-title">Search Results{% if q %} for "{{ q }}"{% endif %}</h2>
+
+        <form action="{{ url_for('public.search') }}" method="GET" style="max-width:500px; margin:0 auto 40px; display:flex; gap:10px;">
+            <input type="text" name="q" value="{{ q }}" placeholder="Search faculty, events, notices, gallery..." style="flex:1; padding:12px; border-radius:8px; border:1px solid #ddd;">
+            <button type="submit" class="btn-primary">Search</button>
+        </form>
+
+        {% if q %}
+            {% if total == 0 %}
+                <p style="text-align:center; color:#666;">No results found for "{{ q }}".</p>
+            {% endif %}
+
+            {% if results.faculty %}
+            <div class="result-group">
+                <h3><i class="fas fa-chalkboard-user"></i> Faculty</h3>
+                {% for member in results.faculty %}
+                <div class="result-row">
+                    <a href="{{ url_for('public.staff') }}">{{ member.name }}</a>
+                    <p>{{ member.designation }}{% if member.department %} - {{ member.department }}{% endif %}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if results.events %}
+            <div class="result-group">
+                <h3><i class="fas fa-calendar-days"></i> Events</h3>
+                {% for event in results.events %}
+                <div class="result-row">
+                    <a href="{{ url_for('public.event_detail', event_id=event.id) }}">{{ event.title }}</a>
+                    <p>{{ event.event_date.strftime('%b %d, %Y') if event.event_date else '' }}{% if event.venue %} - {{ event.venue }}{% endif %}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if results.notices %}
+            <div class="result-group">
+                <h3><i class="fas fa-bullhorn"></i> Notices</h3>
+                {% for notice in results.notices %}
+                <div class="result-row">
+                    <a href="{{ url_for('public.notices') }}">{{ notice.title }}</a>
+                    <p>{{ notice.description[:140] }}{% if notice.description|length > 140 %}...{% endif %}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if results.albums %}
+            <div class="result-group">
+                <h3><i class="fas fa-images"></i> Gallery Albums</h3>
+                {% for album in results.albums %}
+                <div class="result-row">
+                    <a href="{{ url_for('public.gallery_album', category=album.category) }}">{{ album.name }}</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
